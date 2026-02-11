@@ -1,0 +1,199 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #ff8080, #c8cb31);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    display: flex;
+    width: 900px;
+    max-width: 100%;
+    min-height: 520px;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+
+/* LEFT IMAGE */
+.left {
+    width: 50%;
+    background: url("{% static 'img/login.png' %}") center/cover no-repeat;
+}
+
+/* RIGHT FORM */
+.right {
+    width: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(14px);
+    padding: 40px;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+form {
+    width: 100%;
+    max-width: 360px;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 22px;
+}
+
+.input-box {
+    margin-bottom: 14px;
+}
+
+.input-box label {
+    font-size: 14px;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.input-box input {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    background: rgba(255,255,255,0.25);
+    color: #fff;
+}
+
+.btn {
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
+    background: #fff;
+    color: #333;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+}
+
+.register-link {
+    margin-top: 14px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.register-link a {
+    color: #fff;
+    text-decoration: underline;
+}
+
+/* ERROR MESSAGE */
+#error-msg {
+    color: #ffd6d6;
+    font-size: 13px;
+    min-height: 18px;
+    margin-bottom: 8px;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+    .left {
+        width: 100%;
+        height: 180px;
+    }
+    .right {
+        width: 100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="left"></div>
+
+    <div class="right">
+        <form method="POST" action="{% url 'login:login_user' %}" onsubmit="return validateLogin()">
+            {% csrf_token %}
+
+            <h2>Login</h2>
+
+            <div class="input-box">
+                <label>Email</label>
+                <input type="email" id="email" name="email" placeholder="Enter email">
+            </div>
+
+            <div class="input-box">
+                <label>Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter password">
+            </div>
+
+            <p id="error-msg"></p>
+
+            <button type="submit" class="btn">Login</button>
+
+            <div class="register-link">
+                Don’t have an account?
+                <a href="{% url 'login:register' %}">Register</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- JS VALIDATION -->
+<script>
+function validateLogin() {
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    const errorMsg = document.getElementById("error-msg");
+
+    errorMsg.innerText = "";
+
+    if (email === "" || password === "") {
+        errorMsg.innerText = "❌ All fields are required";
+        return false;
+    }
+
+    // Email format check
+    const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+    if (!email.match(emailPattern)) {
+        errorMsg.innerText = "❌ Enter a valid email address";
+        return false;
+    }
+
+    // Password length check
+    if (password.length < 6) {
+        errorMsg.innerText = "❌ Password must be at least 6 characters";
+        return false;
+    }
+
+    return true; // allow submit
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,247 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #ff8080, #c8cb31);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* MAIN CONTAINER */
+.container {
+    display: flex;
+    width: 900px;
+    max-width: 100%;
+    min-height: 520px;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+
+/* LEFT IMAGE */
+.left {
+    width: 50%;
+    background: url("{% static 'img/regis.png' %}") center/cover no-repeat;
+}
+
+/* RIGHT FORM */
+.right {
+    width: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    padding: 40px;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+form {
+    width: 100%;
+    max-width: 360px;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 22px;
+    font-weight: 600;
+}
+
+.input-box {
+    margin-bottom: 14px;
+}
+
+.input-box label {
+    font-size: 14px;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.input-box input {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    background: rgba(255,255,255,0.25);
+    color: #fff;
+    font-size: 14px;
+}
+
+.input-box input::placeholder {
+    color: rgba(255,255,255,0.75);
+}
+
+.btn {
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
+    background: #fff;
+    color: #333;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.login-link {
+    margin-top: 14px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.login-link a {
+    color: #fff;
+    font-weight: 500;
+    text-decoration: underline;
+}
+
+/* ERROR MESSAGE */
+#error-msg {
+    color: #ffd6d6;
+    font-size: 13px;
+    margin-top: 5px;
+    min-height: 18px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .left {
+        width: 100%;
+        height: 200px;
+    }
+
+    .right {
+        width: 100%;
+        padding: 30px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .left {
+        height: 160px;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+
+    .input-box input {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+
+    .btn {
+        font-size: 14px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- LEFT IMAGE -->
+    <div class="left"></div>
+
+    <!-- RIGHT FORM -->
+    <div class="right">
+        <form method="POST" action="{% url 'login:create' %}" onsubmit="return validateForm()">
+            {% csrf_token %}
+
+            <h2>Create Account</h2>
+
+            <div class="input-box">
+                <label>Name</label>
+                <input type="text" name="name" placeholder="Enter your name" required>
+            </div>
+
+            <div class="input-box">
+                <label>Email</label>
+                <input type="email" name="email" placeholder="Enter your email" required>
+            </div>
+
+            <div class="input-box">
+                <label>Mobile</label>
+                <input type="text" name="mobile"
+                       placeholder="Enter mobile number"
+                       pattern="[0-9]{10}"
+                       title="Enter 10 digit mobile number"
+                       required>
+            </div>
+
+            <div class="input-box">
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Enter password" required>
+            </div>
+
+            <div class="input-box">
+                <label>Confirm Password</label>
+                <input type="password" id="confirm_password"
+                       placeholder="Confirm password" required>
+            </div>
+
+            <p id="error-msg"></p>
+
+            <button type="submit" class="btn">Register</button>
+
+            <div class="login-link">
+                Already have an account?
+                <a href="{% url 'login:login' %}">Login</a>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<!-- JAVASCRIPT VALIDATION -->
+<script>
+function validateForm() {
+    const password = document.querySelector('input[name="password"]').value;
+    const confirmPassword = document.getElementById('confirm_password').value;
+    const errorMsg = document.getElementById("error-msg");
+
+    errorMsg.innerText = "";
+
+    if (password.length < 6) {
+        errorMsg.innerText = "❌ Password must be at least 6 characters";
+        return false;
+    }
+
+    if (password !== confirmPassword) {
+        errorMsg.innerText = "❌ Passwords do not match";
+        return false;
+    }
+
+    return true;
+}
+</script>
+
+</body>
+</html>
