@@ -4,10 +4,11 @@ from store.models import *
 
 # Create your views here.
 def index(request):
-    products = Products.objects.all()
+    products = Product.objects.all()
     categories = Category.objects.filter(parent__isnull=True)
-    context={"products": products,
-             "categories": categories}
+    context={
+             "categories": categories,
+             "products": products,}
     return render(request, "index.html",context)
 
 def admin_panel(request):
